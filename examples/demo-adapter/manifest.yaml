@@ -1,0 +1,18 @@
+id: dsh-demo-table
+name: DSH demo table
+version: 0.1.0
+author: howtimeschange
+description: A small portable adapter that reads the current page title and table rows.
+entry_url: https://example.com
+trigger:
+  type: manual
+tasks:
+  - id: read-table
+    name: Read page title and table
+    description: Return the page title and text rows from the first table.
+    script: read-table.js
+    params:
+      - id: label
+        type: text
+        label: Row label
+        default: ''

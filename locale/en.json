@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Crawshrimp Browser",
-    "description": "Independent browser observation and actions with session isolation."
+    "description": "Session-isolated webpage actions, login state, portable scripts and bounded pagination."
   }
 }

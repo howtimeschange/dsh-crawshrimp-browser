@@ -1,13 +1,14 @@
 {
   "name": "dsh-crawshrimp-browser",
-  "version": "0.1.0",
-  "description": "Independent, session-isolated browser tools for DeepSeek Harness",
+  "version": "0.2.0",
+  "description": "Independent webpage actions, login state and portable script workflows for DeepSeek Harness",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
     "./locale/*.json": "./locale/*.json",
-    "./icon": "./icon.svg"
+    "./icon": "./icon.svg",
+    "./client": "./lib/client.js"
   },
   "files": [
     "lib",
@@ -17,11 +18,13 @@
     "LICENSE",
     "cordis.patch.yml",
     "locale",
-    "icon.svg"
+    "icon.svg",
+    "docs",
+    "skills"
   ],
   "scripts": {
     "test": "node --test test/*.test.js",
-    "check": "node --check lib/index.js"
+    "check": "node --check lib/index.js && node --check lib/client.js && node --check lib/preview/manager.js && node --check lib/preview/input.js && node --check lib/preview/transport.js && node --check lib/scripts/errors.js && node --check lib/scripts/manifest.js && node --check lib/scripts/runtime.js && node --check lib/scripts/index.js && node --check examples/save-storage-state.js && node --check examples/demo-adapter/read-table.js && node --check lib/permissions.js && node --check lib/skill.js"
   },
   "engines": {
     "node": "^22.19.0 || >=24.0.0",
@@ -42,15 +45,28 @@
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-ui-sidebar-right",
+        "@deepseek-ai/dsh-client-ui-session"
+      ]
     }
   },
   "dependencies": {
     "@deepseek-ai/dsh-mcp-client": "0.2.1-alpha.4",
     "@deepseek-ai/schemastery": "3.18.5-alpha.2",
-    "playwright-core": "1.64.1"
+    "playwright-core": "1.64.1",
+    "ws": "8.22.0",
+    "yaml": "2.9.1"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "~4.0.5-alpha.2",
     "@deepseek-ai/dsh-tools": "0.2.1-alpha.4"
+  },
+  "devDependencies": {
+    "@deepseek-ai/dsh-skill": "0.2.1-alpha.4"
   }
 }
