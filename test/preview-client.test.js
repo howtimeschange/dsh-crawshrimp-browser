@@ -233,6 +233,7 @@ test('preview channel handshakes, follows pages, streams frames, and scopes cont
   assert.equal(channel.getSnapshot().pendingClaimPageId, 'page-1')
   socket.message({ type: 'result', requestId: claim.requestId, ok: true })
   assert.equal(channel.getSnapshot().claimedPageId, 'page-1')
+  assert.equal(channel.getSnapshot().pendingClaimPageId, '')
 
   assert.equal(channel.sendInput('page-1', { kind: 'text', text: '中文' }), true)
   const input = socket.sent.at(-1)
@@ -306,6 +307,10 @@ test('preview channel rejects old frames, marks stale frames, revokes input leas
   pages({ control: 'agent' })
   assert.equal(channel.getSnapshot().claimedPageId, '')
   assert.equal(channel.getSnapshot().pendingInputPageId, '')
+  assert.equal(channel.getSnapshot().pendingClaimPageId, '')
+  assert.equal(channel.claim('page-1'), true)
+  assert.equal(socket.sent.at(-1).type, 'claim', 'revoked lease can be explicitly claimed again')
+  socket.message({ type: 'result', requestId: socket.sent.at(-1).requestId, ok: false, error: 'busy' })
   socket.message({ type: 'result', requestId: input.requestId, ok: true })
   assert.equal(channel.getSnapshot().claimedPageId, '')
 

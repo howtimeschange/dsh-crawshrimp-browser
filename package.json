@@ -1,7 +1,7 @@
 {
   "name": "dsh-crawshrimp-browser",
-  "version": "0.2.1",
-  "description": "抓虾浏览器自动化插件：为 DeepSeek Harness（DSH）提供实时网页预览、多标签、人工接管、便携脚本和内置 Skill，可独立运行。",
+  "version": "0.3.0",
+  "description": "抓虾浏览器自动化插件：为 DeepSeek Harness 提供 API 优先、实时预览、人工接管、上传下载、业务核验和可复用工作流，无需抓虾后端。",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -26,7 +26,7 @@
   ],
   "scripts": {
     "test": "node --test test/*.test.js",
-    "check": "node --check lib/index.js && node --check lib/client.js && node --check lib/preview/manager.js && node --check lib/preview/input.js && node --check lib/preview/transport.js && node --check lib/scripts/errors.js && node --check lib/scripts/manifest.js && node --check lib/scripts/runtime.js && node --check lib/scripts/index.js && node --check examples/save-storage-state.js && node --check examples/demo-adapter/read-table.js && node --check lib/permissions.js && node --check lib/skill.js && node scripts/sync-icon.mjs --check",
+    "check": "node --check lib/index.js && node --check lib/client.js && node --check lib/preview/manager.js && node --check lib/preview/input.js && node --check lib/preview/transport.js && node --check lib/scripts/errors.js && node --check lib/scripts/manifest.js && node --check lib/scripts/runtime.js && node --check lib/scripts/index.js && node --check examples/save-storage-state.js && node --check examples/demo-adapter/read-table.js && node --check lib/permissions.js && node --check lib/skill.js && node scripts/sync-icon.mjs --check && node --check lib/capabilities/common.js && node --check lib/capabilities/intelligence.js && node --check lib/capabilities/transfers.js && node --check lib/capabilities/evidence.js && node --check lib/capabilities/tools.js",
     "sync:icon": "node scripts/sync-icon.mjs",
     "prepack": "node scripts/sync-icon.mjs --check"
   },
@@ -49,7 +49,10 @@
     "playwright",
     "live-preview",
     "ecommerce",
-    "agent-skill"
+    "agent-skill",
+    "api-first",
+    "network-capture",
+    "workflow-automation"
   ],
   "dsh": {
     "bundle": {

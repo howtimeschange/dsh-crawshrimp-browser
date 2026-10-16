@@ -9,6 +9,22 @@ An independent browser plugin for DeepSeek Harness (DSH). It uses
 each DSH session. It does not import Crawshrimp, call a Crawshrimp HTTP API,
 or inspect existing merchant tabs.
 
+## API-first workflows in v0.3.0
+
+Probe page/framework/module/endpoint metadata, capture bounded network evidence,
+execute page-owned JavaScript or same-origin authenticated requests, and verify
+actual business state. Upload/download workspace files with receipts, export
+redacted journals, distill proven workflows, and draft/test/publish portable
+adapters locally. Multi-phase scripts have bounded phase/page/shared state.
+
+See the [bundled Skill](skills/crawshrimp-browser/SKILL.md) for the decision ladder
+and exact tool arguments, and the [Harness source coverage matrix](docs/harness-parity.zh-CN.md)
+for migration boundaries.
+
+![Actual DSH live browser with horizontal page tabs](docs/screenshots/browser-v030-live.png)
+
+Actual DSH Web UI with a local synthetic product page. [Manual takeover and Chinese input](docs/screenshots/browser-v030-takeover.png).
+
 ## What it provides
 
 The plugin registers these names:
@@ -44,6 +60,8 @@ connection, but create a new context and page owned only by that run. They
 never use the interactive DSH page. The script validator is offline. Script
 runs support bounded pagination and Crawshrimp-compatible parameter and
 shared-state globals; backend CDP/local actions and scheduling are rejected.
+
+Additional namespaced tools: `probe`, `evaluate`, `request`, `capture_requests`, `upload`, `download`, `verify`, `journal`, `workflow`, and `adapter` (each prefixed `crawshrimp_browser_`). Arbitrary JavaScript, requests, transfers and workflow/adapter execution use native approval and page takeover locks; fixed observation and verification tools do not accept arbitrary code.
 
 ## Bundled Crawshrimp Skill
 
@@ -83,7 +101,7 @@ The repository is intentionally ready to be installed from GitHub rather than
 claiming an npm publication:
 
 ```sh
-dsh plugin --profile web add -w github:howtimeschange/dsh-crawshrimp-browser#v0.2.1
+dsh plugin --profile web add -w github:howtimeschange/dsh-crawshrimp-browser#v0.3.0
 ```
 
 The loader reads `package.json`'s `dsh.bundle.patch` metadata and applies the
@@ -167,7 +185,7 @@ injects the same JSON-cloned object at `window.__PARAMS__` and
 `meta.has_more: true` to request another evaluation in the same page; the
 runtime carries `meta.shared` forward and aggregates `data`. The configured
 `maxPages` is 1–100 and a run can override it with `max_pages`. Unsupported
-`meta.action`, `meta.next_phase`, CDP actions, and local actions fail clearly.
+backend-specific actions fail clearly. Supported phase actions include `next_phase`, `reload_page`, `abort`, uploads/downloads and network capture. Use `max_phases` (default 20, cap 200); see the [runtime protocol](skills/crawshrimp-browser/references/runtime.md).
 
 Use the bundled [demo adapter](examples/demo-adapter) and
 `node examples/save-storage-state.js` helper as starting points. Keep storage
@@ -190,7 +208,7 @@ Chrome. It never uses a merchant account or a real merchant site. Set
 
 Browser owns all webpage work, including portable scripts. [Data](https://github.com/howtimeschange/dsh-crawshrimp-data) handles record/table cleanup and [Office](https://github.com/howtimeschange/dsh-crawshrimp-office) handles document jobs. Each package works independently.
 
-Standalone Scripts users should follow the [migration guide](docs/migration-from-scripts.md). See the [source-based functional roadmap (Chinese)](docs/functional-map.zh-CN.md) for future additions; page probing/network/downloads are Browser work, and PDF/labels/rendering are Office work. These roadmap items are not included in the current release.
+Standalone Scripts users should follow the [migration guide](docs/migration-from-scripts.md). See the [source-based functional roadmap (Chinese)](docs/functional-map.zh-CN.md) for the original roadmap; page probing, network evidence and uploads/downloads now ship in Browser v0.3.0. The current [coverage matrix](docs/harness-parity.zh-CN.md) takes precedence.
 
 Version 0.2.0 adds live preview/manual takeover, page management/navigation/select/press/wait, explicit login state, and the merged portable script runtime with validation, parameters and bounded pagination.
 

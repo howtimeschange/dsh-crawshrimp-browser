@@ -73,6 +73,18 @@ test('actual tool actions, authenticated preview control and isolated script-pag
     assert.equal((await take(m => m.requestId === 'claim')).ok, true)
     const blocked = await execute('crawshrimp_browser_fill', { pageId: a.pageId, selector: '#name', value: 'must not write' })
     assert.equal(blocked.isError, true)
+    for (const [method, input] of [
+      ['evaluate', { expression: "document.querySelector('#name').value='bad'" }],
+      ['request', { url: '/must-not-request', method: 'POST' }],
+      ['capture_requests', { trigger: { type: 'click', selector: '#save' } }],
+      ['upload', { paths: ['missing.txt'], selector: '#name' }],
+      ['download', { selector: '#save' }],
+      ['workflow', { action: 'run', workflowId: 'missing' }],
+    ]) {
+      const denied = await execute(`crawshrimp_browser_${method}`, { pageId: a.pageId, ...input })
+      assert.equal(denied.isError, true, `manual control must block ${method}`)
+      assert.match(JSON.stringify(denied), /control|takeover|human|用户接管/i)
+    }
     assert.match(JSON.stringify(blocked), /用户接管|human|control/i)
     send({ type: 'release', pageId: a.pageId, requestId: 'release' })
     assert.equal((await take(m => m.requestId === 'release')).ok, true)

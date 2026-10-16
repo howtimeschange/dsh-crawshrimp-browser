@@ -203,9 +203,12 @@ test('tool names are namespaced and browser actions are an explicit approval set
     TOOL_NAMES.press,
     TOOL_NAMES.select,
     TOOL_NAMES.scriptRun,
+    TOOL_NAMES.evaluate, TOOL_NAMES.request, TOOL_NAMES.capture_requests,
+    TOOL_NAMES.upload, TOOL_NAMES.download, TOOL_NAMES.workflow, TOOL_NAMES.adapter,
   ].sort())
   assert.deepEqual(Object.keys(TOOL_NAMES).sort(), [
     'click', 'close', 'fill', 'navigate', 'open', 'pages', 'press', 'screenshot', 'select', 'wait', 'observe', 'scriptList', 'scriptValidate', 'scriptRun',
+    'probe', 'evaluate', 'request', 'capture_requests', 'upload', 'download', 'verify', 'journal', 'workflow', 'adapter',
   ].sort())
   for (const name of Object.values(TOOL_NAMES)) assert.match(name, /^crawshrimp_browser_[a-z_]+$/)
 })

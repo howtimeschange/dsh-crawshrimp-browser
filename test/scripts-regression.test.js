@@ -54,7 +54,7 @@ const failureScript = `;(async () => {
 })()`
 
 const unsupportedActionScript = `;(async () => {
-  return { success: true, data: [], meta: { action: 'next_phase', next_phase: 'other' } }
+  return { success: true, data: [], meta: { action: 'teleport' } }
 })()`
 
 const cancellableScript = `;(async () => {

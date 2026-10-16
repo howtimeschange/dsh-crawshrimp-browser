@@ -6,20 +6,37 @@
 
 面向 **DeepSeek Harness（DSH）** 的独立浏览器自动化插件，提供网页操作、实时预览、
 多标签页、人工接管和电商页面脚本执行。内置抓虾浏览器 Skill，帮助 Agent 按
-“观察 → 操作 → 核验”完成表格采集、表单填充和有界翻页。
+“观察 → API 优先执行 → 业务核验 → 流程沉淀”完成采集、填表、上传下载和多阶段任务。
 
 可独立运行，所需环境为 DSH、Node.js 和 Chrome/Chromium；无需抓虾后端。
 这是社区插件，由 `dsh-crawshrimp-browser` 单个包提供工具、预览面板、Skill 和抓虾官方图标。
 
+## v0.3.0：API 优先的完整浏览器工作流
+
+- **理解页面再执行**：探查 DOM、框架与端点线索，生成页面模型和策略 bundle。
+- **API 优先**：页面模块/客户端调用、同源登录态请求；接口不明确时捕获真实网络证据，再回退 DOM。
+- **上传下载**：工作区文件、文件选择器、认证 URL 和点击/blob 下载，返回大小、类型和 SHA-256 回执。
+- **结构化核验**：DOM、数量、URL、API 业务字段和文件证据；保存脱敏 session journal。
+- **流程复用**：从已验证步骤 distill workflow，或通过 adapter 草稿 → 隔离测试 → 本地发布复用复杂脚本。
+- **阶段执行**：phase/page/shared、reload/abort、文件和网络动作，受阶段、分页、时间和输出上限约束。
+
+[Harness 源码能力对照](docs/harness-parity.zh-CN.md) · [完整 Skill 与工具示例](skills/crawshrimp-browser/SKILL.md)
+
+## 界面实测
+
+![DSH 抓虾浏览器实时预览：顶部多标签与实际商品页面](docs/screenshots/browser-v030-live.png)
+
+实际 DSH Web 面板截图，使用本地合成商品页；[人工接管与中文输入效果](docs/screenshots/browser-v030-takeover.png)。
+
 ## 快速开始
 
-当前版本：[v0.2.1](https://github.com/howtimeschange/dsh-crawshrimp-browser/releases/tag/v0.2.1)。
+当前版本：[v0.3.0](https://github.com/howtimeschange/dsh-crawshrimp-browser/releases/tag/v0.3.0)。
 适配 **DSH `0.2.1-alpha.4`**，Node.js `^22.19.0 || >=24.0.0`；请先安装 Chrome/Chromium。
 
 使用 DSH 官方插件加载器安装到 Web profile：
 
 ```sh
-dsh plugin --profile web add -w github:howtimeschange/dsh-crawshrimp-browser#v0.2.1
+dsh plugin --profile web add -w github:howtimeschange/dsh-crawshrimp-browser#v0.3.0
 dsh --profile web
 ```
 
@@ -56,6 +73,18 @@ Word/PowerPoint 文档使用[抓虾 Office 插件](https://github.com/howtimesch
 - `crawshrimp_browser_script_validate`：离线校验任务和参数，不请求审批或启动浏览器。
 - `crawshrimp_browser_script_run`：在新建的隔离上下文执行任务脚本并保存 JSON artifact。
 
+新增工具：
+
+| 工具后缀（完整前缀 `crawshrimp_browser_`） | 用途 |
+| --- | --- |
+| probe | 页面/框架/端点探查与策略 bundle |
+| evaluate / request | 有审批的页面 JS / 同源登录态 API 请求 |
+| capture_requests | 有界网络证据，可选 reload/click/scroll 触发 |
+| upload / download | 工作区文件上传下载与回执 |
+| verify / journal | 结构化核验与当前会话证据日志 |
+| workflow | 成功步骤沉淀和显式复用 |
+| adapter | 草稿、隔离测试、原样本地发布 |
+
 打开、导航、点击、填充、选择、按键、关闭和脚本执行遵循 DSH 原生权限。
 选择“完全权限”（`danger-full-access` + `never`）后自动执行，不再额外弹审批。
 其他权限组合仍走 DSH 原生审批；单独的 `never` 不代表允许。列页面、观察、等待、截图是只读工具，不弹审批。没有审批服务时会 fail closed；
@@ -65,13 +94,12 @@ Word/PowerPoint 文档使用[抓虾 Office 插件](https://github.com/howtimesch
 
 脚本运行遵循相同原生权限映射，并复用插件已经建立的浏览器连接；每次运行都会创建
 只属于该运行的新 BrowserContext 和页面，不会使用交互式 DSH 页面。脚本校验是离线的。
-脚本支持有上限的翻页以及抓虾兼容的参数、shared-state 全局变量；后端 CDP/本地动作和
-调度声明会被拒绝。
+脚本支持有上限的翻页以及抓虾兼容的参数、shared-state 全局变量；不支持的后端专用动作和调度声明会被拒绝；受控的文件与网络动作通过同包能力执行。
 
 ## 内置抓虾 Skill
 
 同包注册 **crawshrimp-browser** 到 DSH 原生 Skill 目录，Agent 可通过 `skill`
-工具加载，也可从技能菜单选择。内容覆盖“先观察 → 按 ref 操作 → 核验”、人工登录接管
+工具加载，也可从技能菜单选择。内容覆盖“观察 → API 优先 → 核验 → 沉淀”、网络探查、上传下载、人工登录接管
 和便携脚本复用，只使用本插件工具，不需要单独安装或抓虾后端。最小 CLI 组合没有
 Skill 服务时，全部浏览器工具仍可使用。
 
@@ -102,7 +130,7 @@ Chromium，并配置 `executablePath` 或 `channel`。macOS 默认使用系统 C
 仓库按 GitHub 安装方式准备，没有假定已经发布 npm 包：
 
 ```sh
-dsh plugin --profile web add -w github:howtimeschange/dsh-crawshrimp-browser#v0.2.1
+dsh plugin --profile web add -w github:howtimeschange/dsh-crawshrimp-browser#v0.3.0
 ```
 
 本地验证：
@@ -179,7 +207,7 @@ JSON 文件路径。文件只读使用，必须是普通文件且不超过 5 MiB
 `window.__CRAWSHRIMP_PAGE__`、`window.__CRAWSHRIMP_PHASE__` 和
 `window.__CRAWSHRIMP_SHARED__`。返回 `meta.has_more: true` 会在同一页面再次执行，运行时
 会传递 `meta.shared` 并合并 `data`。`maxPages` 范围为 1–100，单次运行可以用 `max_pages`
-覆盖。除 `complete` 外的 `meta.action`、`meta.next_phase`、CDP 动作和本地动作会明确失败。
+覆盖。支持 `next_phase`、`reload_page`、`abort` 和受控文件/网络动作；每页阶段默认最多 20 次，单次可用 `max_phases` 调整，上限 200。详见[阶段协议](skills/crawshrimp-browser/references/runtime.md)。
 
 可以从[示例适配器](examples/demo-adapter)开始，并使用
 `node examples/save-storage-state.js` 辅助程序保存登录状态。storage-state 文件应保存在
@@ -201,7 +229,7 @@ npm pack --dry-run
 
 浏览器包统一负责全部网页工作，包含便携页面脚本。[数据包](https://github.com/howtimeschange/dsh-crawshrimp-data)负责记录/表格清洗，[Office 包](https://github.com/howtimeschange/dsh-crawshrimp-office)负责文档。三个包均可独立运行。
 
-原 Scripts 用户请按[迁移指南](docs/migration-from-scripts.md)升级。完整的[功能路线图](docs/functional-map.zh-CN.md)记录了源码依据；后续页面探测、网络证据和下载继续归浏览器，PDF、标签和渲染归 Office。上述后续能力未包含在当前版本。
+原 Scripts 用户请按[迁移指南](docs/migration-from-scripts.md)升级。[功能划分](docs/functional-map.zh-CN.md)记录了早期路线图；v0.3.0 已在 Browser 中提供页面探查、网络证据和上传下载，最新状态以[源码能力对照](docs/harness-parity.zh-CN.md)为准。
 
 0.2.0 增加内置抓虾 Skill、完全权限自动执行、顶部标签实时预览/人工接管、页面管理、导航、下拉选择、按键、等待、显式登录态，以及合并后的脚本校验、参数和有界翻页能力。
 
