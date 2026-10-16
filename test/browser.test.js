@@ -72,7 +72,8 @@ function execution(agent, signal = new AbortController().signal) {
   return { agent, signal, callId: `test-${Math.random().toString(16).slice(2)}` }
 }
 
-function waitForDevtoolsEndpoint(child, timeoutMs = 15000) {
+// A fresh Chrome profile can start slowly on a cold hosted CI runner.
+function waitForDevtoolsEndpoint(child, timeoutMs = 45000) {
   return new Promise((resolve, reject) => {
     let output = ''
     let settled = false
