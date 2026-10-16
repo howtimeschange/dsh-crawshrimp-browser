@@ -1,11 +1,41 @@
-# dsh-crawshrimp-browser
+# 抓虾浏览器插件 · DeepSeek Harness（DSH）
 
-插件卡片、实时浏览器标签和入口统一使用同包封装的抓虾应用图标。
+**简体中文** | [English](README.en.md)
 
-这是一个独立的 DeepSeek Harness（DSH）浏览器插件。它直接使用
-`playwright-core`，为每个 DSH 会话创建独立的 Playwright
-`BrowserContext`。它不导入抓虾、不调用抓虾 HTTP API，也不会读取或接管已有的
-电商页面。
+<img src="icon.png" width="80" height="80" alt="抓虾 Crawshrimp Harness 官方图标">
+
+面向 **DeepSeek Harness（DSH）** 的独立浏览器自动化插件，提供网页操作、实时预览、
+多标签页、人工接管和电商页面脚本执行。内置抓虾浏览器 Skill，帮助 Agent 按
+“观察 → 操作 → 核验”完成表格采集、表单填充和有界翻页。
+
+可独立运行，所需环境为 DSH、Node.js 和 Chrome/Chromium；无需抓虾后端。
+这是社区插件，由 `dsh-crawshrimp-browser` 单个包提供工具、预览面板、Skill 和抓虾官方图标。
+
+## 快速开始
+
+当前版本：[v0.2.1](https://github.com/howtimeschange/dsh-crawshrimp-browser/releases/tag/v0.2.1)。
+适配 **DSH `0.2.1-alpha.4`**，Node.js `^22.19.0 || >=24.0.0`；请先安装 Chrome/Chromium。
+
+使用 DSH 官方插件加载器安装到 Web profile：
+
+```sh
+dsh plugin --profile web add -w github:howtimeschange/dsh-crawshrimp-browser#v0.2.1
+dsh --profile web
+```
+
+在会话中让 Agent 加载 `crawshrimp-browser` Skill，再打开你指定的网页。
+从右侧面板的新增/引导菜单选择“实时浏览器”，即可看到实际页面，网页标签横向排列在顶部。
+需要人工登录或调整页面时，使用“接管操作”，完成后“恢复 Agent”。
+
+## 适用场景
+
+- **网页自动化**：观察页面、按元素 ref 点击和填表，操作后再次核验结果。
+- **电商页面数据采集**：读取商品表格，运行配置好的便携 JavaScript 脚本，校验参数并有界翻页。
+- **可见的 Agent 协作**：实时查看网页、多标签切换，人工接管登录或操作，脚本页只读预览。
+
+数据清洗和 CSV/Excel 导出使用[抓虾数据插件](https://github.com/howtimeschange/dsh-crawshrimp-data)；
+Word/PowerPoint 文档使用[抓虾 Office 插件](https://github.com/howtimeschange/dsh-crawshrimp-office)。
+全部网页自动化集中在本浏览器插件中。
 
 ## 能力
 
@@ -72,7 +102,7 @@ Chromium，并配置 `executablePath` 或 `channel`。macOS 默认使用系统 C
 仓库按 GitHub 安装方式准备，没有假定已经发布 npm 包：
 
 ```sh
-dsh plugin --profile demo add -w github:howtimeschange/dsh-crawshrimp-browser#v0.2.1
+dsh plugin --profile web add -w github:howtimeschange/dsh-crawshrimp-browser#v0.2.1
 ```
 
 本地验证：
@@ -171,6 +201,8 @@ npm pack --dry-run
 
 浏览器包统一负责全部网页工作，包含便携页面脚本。[数据包](https://github.com/howtimeschange/dsh-crawshrimp-data)负责记录/表格清洗，[Office 包](https://github.com/howtimeschange/dsh-crawshrimp-office)负责文档。三个包均可独立运行。
 
-原 Scripts 用户请按[迁移指南](docs/migration-from-scripts.md)升级。完整的[功能路线图](docs/functional-map.zh-CN.md)记录了源码依据；后续页面探测、网络证据和下载继续归浏览器，PDF、标签和渲染归 Office。上述后续能力未包含在 0.2.0。
+原 Scripts 用户请按[迁移指南](docs/migration-from-scripts.md)升级。完整的[功能路线图](docs/functional-map.zh-CN.md)记录了源码依据；后续页面探测、网络证据和下载继续归浏览器，PDF、标签和渲染归 Office。上述后续能力未包含在当前版本。
 
 0.2.0 增加内置抓虾 Skill、完全权限自动执行、顶部标签实时预览/人工接管、页面管理、导航、下拉选择、按键、等待、显式登录态，以及合并后的脚本校验、参数和有界翻页能力。
+
+0.2.1 统一封装抓虾官方图标，并用于 DSH 插件卡片、实时浏览器标签和引导入口。

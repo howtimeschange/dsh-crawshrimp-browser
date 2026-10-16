@@ -1,7 +1,7 @@
 {
   "name": "dsh-crawshrimp-browser",
   "version": "0.2.1",
-  "description": "Independent webpage actions, login state and portable script workflows for DeepSeek Harness",
+  "description": "抓虾浏览器自动化插件：为 DeepSeek Harness（DSH）提供实时网页预览、多标签、人工接管、便携脚本和内置 Skill，可独立运行。",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -15,6 +15,7 @@
     "examples",
     "README.md",
     "README.zh-CN.md",
+    "README.en.md",
     "LICENSE",
     "cordis.patch.yml",
     "locale",
@@ -41,9 +42,14 @@
   "keywords": [
     "dsh-plugin",
     "deepseek-harness",
+    "deepseek",
     "crawshrimp",
+    "抓虾",
+    "browser-automation",
+    "playwright",
+    "live-preview",
     "ecommerce",
-    "browser"
+    "agent-skill"
   ],
   "dsh": {
     "bundle": {
