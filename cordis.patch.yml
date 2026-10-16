@@ -1,0 +1,8 @@
+# Install with the official DSH plugin loader. The module is loaded from this
+# package's own entry point and has no Crawshrimp backend dependency.
+- insert:
+    - id: crawshrimp-browser
+      name: dsh-crawshrimp-browser
+      config:
+        headless: true
+        channel: chrome

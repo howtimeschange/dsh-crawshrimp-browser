@@ -1,0 +1,6 @@
+- insert:
+    - id: crawshrimp-browser
+      name: dsh-crawshrimp-browser
+      config:
+        headless: true
+        channel: chrome
