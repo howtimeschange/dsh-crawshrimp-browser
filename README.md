@@ -1,5 +1,7 @@
 # dsh-crawshrimp-browser
 
+The plugin card, Live Browser tab and guide use the bundled Crawshrimp application icon.
+
 An independent browser plugin for DeepSeek Harness (DSH). It uses
 `playwright-core` directly and owns a fresh Playwright `BrowserContext` for
 each DSH session. It does not import Crawshrimp, call a Crawshrimp HTTP API,
@@ -79,7 +81,7 @@ The repository is intentionally ready to be installed from GitHub rather than
 claiming an npm publication:
 
 ```sh
-dsh plugin --profile demo add -w github:howtimeschange/dsh-crawshrimp-browser#v0.2.0
+dsh plugin --profile demo add -w github:howtimeschange/dsh-crawshrimp-browser#v0.2.1
 ```
 
 The loader reads `package.json`'s `dsh.bundle.patch` metadata and applies the

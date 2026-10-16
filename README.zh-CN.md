@@ -1,5 +1,7 @@
 # dsh-crawshrimp-browser
 
+插件卡片、实时浏览器标签和入口统一使用同包封装的抓虾应用图标。
+
 这是一个独立的 DeepSeek Harness（DSH）浏览器插件。它直接使用
 `playwright-core`，为每个 DSH 会话创建独立的 Playwright
 `BrowserContext`。它不导入抓虾、不调用抓虾 HTTP API，也不会读取或接管已有的
@@ -70,7 +72,7 @@ Chromium，并配置 `executablePath` 或 `channel`。macOS 默认使用系统 C
 仓库按 GitHub 安装方式准备，没有假定已经发布 npm 包：
 
 ```sh
-dsh plugin --profile demo add -w github:howtimeschange/dsh-crawshrimp-browser#v0.2.0
+dsh plugin --profile demo add -w github:howtimeschange/dsh-crawshrimp-browser#v0.2.1
 ```
 
 本地验证：
